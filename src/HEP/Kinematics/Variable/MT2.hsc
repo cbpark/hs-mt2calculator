@@ -41,7 +41,7 @@ mT2Calc :: [Double]
         -> [Double]
         -> [Double]
         -> Double
-        -> Either String (Double, Double, Double)
+        -> Either String (Double, [Double], [Double])
 mT2Calc visA visB ptmiss mInvisible =
     System.IO.Unsafe.unsafePerformIO $
           alloca $ \mt2ValPtr -> do
@@ -52,6 +52,10 @@ mT2Calc visA visB ptmiss mInvisible =
             if status == 0
             then do
               (MT2Value mt2 qx qy) <- peek mt2ValPtr
-              return $ Right (realToFrac mt2, realToFrac qx, realToFrac qy)
-            else do
+              return $ Right ( realToFrac mt2
+                             , [realToFrac qx, realToFrac qy]
+                             , [          head ptmiss - realToFrac qx
+                               , (head . tail) ptmiss - realToFrac qy ]
+                             )
+            else
               return $ Left "MT2 calculation failed."
