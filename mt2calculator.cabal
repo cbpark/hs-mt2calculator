@@ -25,6 +25,6 @@ executable mt2runtest
   build-depends:       base >=4.6,
                        mt2calculator
   extra-libraries:     MT2Calculator stdc++
-  hs-source-dirs:      test
+  hs-source-dirs:      test, src
   default-language:    Haskell2010
   ghc-options:         -Wall -O2 -fwarn-incomplete-patterns
