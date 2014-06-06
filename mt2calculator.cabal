@@ -22,8 +22,7 @@ library
 executable mt2runtest
   main-is:             Main.hs
   other-modules:       HEP.Kinematics.Variable.MT2
-  build-depends:       base >=4.6,
-                       mt2calculator
+  build-depends:       base >=4.6
   extra-libraries:     MT2Calculator stdc++
   hs-source-dirs:      test, src
   default-language:    Haskell2010
