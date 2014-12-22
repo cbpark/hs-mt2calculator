@@ -6,7 +6,7 @@ import Foreign
 import Foreign.C.Types
 import System.IO.Unsafe (unsafePerformIO)
 
-#include <mt2_cwrapper/MT2Calculator_c.h>
+#include <mt2_cwrapper/mt2calculator_c.h>
 
 data MT2Value = MT2Value { mT2 :: CDouble
                          , kx  :: CDouble
@@ -29,7 +29,7 @@ instance Storable MT2Value where
                              (#poke mt2calc_result, qx ) ptr qxvalue
                              (#poke mt2calc_result, qy ) ptr qyvalue
 
-foreign import ccall unsafe "mt2_cwrapper/MT2Calculator_c.h MT2Calculator_run"
+foreign import ccall unsafe "mt2_cwrapper/mt2calculator_c.h run_mt2calculator"
     c_MT2CalculatorRun :: Ptr CDouble
                        -> Ptr CDouble
                        -> Ptr CDouble
