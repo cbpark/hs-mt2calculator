@@ -1,6 +1,6 @@
 module Main where
 
-import HEP.Kinematics.Variable.MT2
+import           HEP.Kinematics.Variable.MT2
 
 main :: IO ()
 main = do
@@ -9,4 +9,4 @@ main = do
       ptmiss = [-200,280]
       mInvisible = 100
 
-  print $ mT2Calc visA visB ptmiss mInvisible
+  print $ symmMT2 visA visB ptmiss mInvisible
