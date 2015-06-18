@@ -4,9 +4,9 @@ import           HEP.Kinematics.Variable.MT2
 
 main :: IO ()
 main = do
-  let visA = [423,410,20,-20]
-      visB = [398,-210,-300,44]
+  let visA = [100, 410, 20]
+      visB = [150, -210, -300]
       ptmiss = [-200,280]
       mInvisible = 100
 
-  print $ mT2Symm visA visB ptmiss mInvisible
+  print $ mT2AsymmBisect visA visB ptmiss mInvisible mInvisible
