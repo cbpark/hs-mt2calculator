@@ -38,6 +38,7 @@ foreign import ccall unsafe "mt2_cwrapper/symm_mt2_minuit2_c.h run_symm_mt2_minu
                        -> Ptr MT2Value
                        -> IO CInt
 
+-- | calculates MT2 using Minuit2.
 mT2Symm :: [Double]
         -> [Double]
         -> [Double]
@@ -54,7 +55,7 @@ mT2Symm visA visB ptmiss mInvisible =
             then do (MT2Value mt2 qx qy) <- peek mt2ValPtr
                     return $ Right ( realToFrac mt2
                                    , [realToFrac qx, realToFrac qy]
-                                   , [          head ptmiss - realToFrac qx
+                                   , [        head ptmiss - realToFrac qx
                                    , (head . tail) ptmiss - realToFrac qy ]
                                    )
             else return $ Left "MT2 calculation failed."
@@ -64,6 +65,7 @@ foreign import ccall unsafe "mt2_cwrapper/lester_mt2_bisect_c.h asymm_mt2_bisect
                    -> CDouble -> CDouble -> CDouble
                    -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble
 
+-- | calculates MT2 using the lester_mt2_bisect algorithm.
 mT2AsymmBisect :: [Double] -> [Double] -> [Double] -> Double -> Double -> Double
 mT2AsymmBisect visA visB ptMiss mInvisA mInvisB =
   let (mVisA:pxVisA:pyVisA:_) = map realToFrac visA
