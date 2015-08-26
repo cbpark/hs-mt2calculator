@@ -1,6 +1,9 @@
-*.o
 *.hi
+*.o
 dist
 cabal.sandbox.config
 .cabal-sandbox
+.#*
+.*.swp
 TAGS
+.stack-work
