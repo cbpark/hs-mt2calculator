@@ -41,7 +41,6 @@ foreign import ccall unsafe "mt2_cwrapper/symm_mt2_minuit2_c.h run_symm_mt2_minu
                      -> Ptr MT2Value
                      -> IO CInt
 
--- | calculates MT2 using Minuit2.
 mT2SymmPrim :: [Double]
             -> [Double]
             -> [Double]
@@ -63,6 +62,7 @@ mT2SymmPrim visA visB ptmiss mInvisible =
                                    )
             else return $ Left "MT2 calculation failed."
 
+-- | calculates MT2 using Minuit2.
 mT2Symm :: FourMomentum -> FourMomentum -> TransverseMomentum -> Double
         -> Either String (Double, [Double], [Double])
 mT2Symm visA visB ptmiss mInvisible =
@@ -76,7 +76,6 @@ foreign import ccall unsafe "mt2_cwrapper/lester_mt2_bisect_c.h asymm_mt2_bisect
                    -> CDouble -> CDouble -> CDouble
                    -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble
 
--- | calculates MT2 using the lester_mt2_bisect algorithm.
 mT2AsymmBisectPrim :: [Double] -> [Double] -> [Double] -> Double -> Double -> Double
 mT2AsymmBisectPrim visA visB ptMiss mInvisA mInvisB =
   let (mVisA:pxVisA:pyVisA:_) = map realToFrac visA
@@ -86,6 +85,7 @@ mT2AsymmBisectPrim visA visB ptMiss mInvisA mInvisB =
                                    pxMiss pyMiss
                                    (realToFrac mInvisA) (realToFrac mInvisB)
 
+-- | calculates MT2 using the lester_mt2_bisect algorithm.
 mT2AsymmBisect :: FourMomentum -> FourMomentum -> TransverseMomentum
                -> Double  -- ^ invariant mass of the first invisible system
                -> Double  -- ^ invariant mass of the second invisible system
