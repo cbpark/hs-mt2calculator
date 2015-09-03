@@ -1,8 +1,15 @@
 flags:
   hs-mt2calculator:
     devel: false
+
+extra-include-dirs:
+- /usr/local/include
+
+extra-lib-dirs:
+- /usr/local/lib
+
 packages:
 - '.'
-- '../hep-utilities'
+- ../hep-utilities
 extra-deps: []
 resolver: lts-3.4
