@@ -86,9 +86,11 @@ mT2AsymmBisectPrim visA visB ptMiss mInvisA mInvisB =
                                    (realToFrac mInvisA) (realToFrac mInvisB)
 
 -- | calculates MT2 using the lester_mt2_bisect algorithm.
-mT2AsymmBisect :: FourMomentum -> FourMomentum -> TransverseMomentum
-               -> Double  -- ^ invariant mass of the first invisible system
-               -> Double  -- ^ invariant mass of the second invisible system
+mT2AsymmBisect :: FourMomentum       -- ^ four-momentum of the first visible systme
+               -> FourMomentum       -- ^ four-momentum of the second visible system
+               -> TransverseMomentum -- ^ missing transverse momentum
+               -> Double             -- ^ invariant mass of the first invisible system
+               -> Double             -- ^ invariant mass of the second invisible system
                -> Double
 mT2AsymmBisect visA visB ptmiss mInvisA mInvisB =
   let mVisA = mass visA
