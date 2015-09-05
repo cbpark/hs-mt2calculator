@@ -12,5 +12,6 @@ main = do
       ptmiss = setXY (-200.0) 280.0
       mInvisible = 100.0
 
-  print $ mT2Symm visA visB ptmiss mInvisible
+  print $ mT2SymmMinuit2 visA visB ptmiss mInvisible
+  print $ mT2SymmBisect visA visB ptmiss mInvisible
   print $ mT2AsymmBisect visA visB ptmiss mInvisible mInvisible

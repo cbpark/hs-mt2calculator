@@ -1,6 +1,11 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module HEP.Kinematics.Variable.MT2 (mT2Symm, mT2AsymmBisect) where
+module HEP.Kinematics.Variable.MT2
+       (
+         mT2SymmMinuit2
+       , mT2SymmBisect
+       , mT2AsymmBisect
+       ) where
 
 import           Foreign
 import           Foreign.C.Types
@@ -63,9 +68,9 @@ mT2SymmPrim visA visB ptmiss mInvisible =
             else return $ Left "MT2 calculation failed."
 
 -- | calculates MT2 using Minuit2.
-mT2Symm :: FourMomentum -> FourMomentum -> TransverseMomentum -> Double
-        -> Either String (Double, [Double], [Double])
-mT2Symm visA visB ptmiss mInvisible =
+mT2SymmMinuit2 :: FourMomentum -> FourMomentum -> TransverseMomentum -> Double
+               -> Either String (Double, [Double], [Double])
+mT2SymmMinuit2 visA visB ptmiss mInvisible =
   let (eA, pxA, pyA, pzA) = epxpypz visA
       (eB, pxB, pyB, pzB) = epxpypz visB
       (pxX, pyX) = pxpy ptmiss
@@ -100,3 +105,11 @@ mT2AsymmBisect visA visB ptmiss mInvisA mInvisB =
       (pxX, pyX) = pxpy ptmiss
   in mT2AsymmBisectPrim [mVisA, pxA, pyA] [mVisB, pxB, pyB] [pxX, pyX]
                         mInvisA mInvisB
+
+mT2SymmBisect :: FourMomentum       -- ^ four-momentum of the first visible systme
+              -> FourMomentum       -- ^ four-momentum of the second visible system
+              -> TransverseMomentum -- ^ missing transverse momentum
+              -> Double             -- ^ invariant mass of each invisible system
+              -> Double
+mT2SymmBisect visA visB ptmiss mInvisible =
+  mT2AsymmBisect visA visB ptmiss mInvisible mInvisible
