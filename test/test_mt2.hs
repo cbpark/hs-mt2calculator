@@ -13,5 +13,6 @@ main = do
       mInvisible = 100.0
 
   print $ mT2SymmMinuit2 visA visB ptmiss mInvisible
-  print $ mT2SymmBisect visA visB ptmiss mInvisible
-  print $ mT2AsymmBisect visA visB ptmiss mInvisible mInvisible
+  print $ mT2SymmChengHanBisect visA visB ptmiss mInvisible
+  print $ mT2SymmLesterBisect visA visB ptmiss mInvisible
+  print $ mT2AsymmLesterBisect visA visB ptmiss mInvisible mInvisible

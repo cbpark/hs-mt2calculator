@@ -3,8 +3,9 @@
 module HEP.Kinematics.Variable.MT2
        (
          mT2SymmMinuit2
-       , mT2SymmBisect
-       , mT2AsymmBisect
+       , mT2SymmChengHanBisect
+       , mT2SymmLesterBisect
+       , mT2AsymmLesterBisect
        ) where
 
 import           Foreign
@@ -15,6 +16,7 @@ import           HEP.Kinematics   (FourMomentum, HasFourMomentum (..),
                                    TransverseMomentum)
 
 #include <mt2_cwrapper/symm_mt2_minuit2_c.h>
+#include <mt2_cwrapper/mt2_bisect_c.h>
 #include <mt2_cwrapper/lester_mt2_bisect_c.h>
 
 data MT2Value = MT2Value { mT2 :: CDouble
@@ -76,40 +78,67 @@ mT2SymmMinuit2 visA visB ptmiss mInvisible =
       (pxX, pyX) = pxpy ptmiss
   in mT2SymmPrim [eA, pxA, pyA, pzA] [eB, pxB, pyB, pzB] [pxX, pyX] mInvisible
 
-foreign import ccall unsafe "mt2_cwrapper/lester_mt2_bisect_c.h asymm_mt2_bisect"
-  c_AsymmMT2Bisect :: CDouble -> CDouble -> CDouble
-                   -> CDouble -> CDouble -> CDouble
-                   -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble
+foreign import ccall unsafe "mt2_cwrapper/lester_mt2_bisect_c.h asymm_mt2_lester_bisect"
+  c_AsymmMT2LesterBisect :: CDouble -> CDouble -> CDouble
+                         -> CDouble -> CDouble -> CDouble
+                         -> CDouble -> CDouble -> CDouble -> CDouble -> CDouble
 
-mT2AsymmBisectPrim :: [Double] -> [Double] -> [Double] -> Double -> Double -> Double
-mT2AsymmBisectPrim visA visB ptMiss mInvisA mInvisB =
+mT2AsymmLesterBisectPrim :: [Double] -> [Double] -> [Double] -> Double -> Double -> Double
+mT2AsymmLesterBisectPrim visA visB ptMiss mInvisA mInvisB =
   let (mVisA:pxVisA:pyVisA:_) = map realToFrac visA
       (mVisB:pxVisB:pyVisB:_) = map realToFrac visB
       (pxMiss:pyMiss:_) = map realToFrac ptMiss
-  in realToFrac $ c_AsymmMT2Bisect mVisA pxVisA pyVisA mVisB pxVisB pyVisB
-                                   pxMiss pyMiss
-                                   (realToFrac mInvisA) (realToFrac mInvisB)
+  in realToFrac $ c_AsymmMT2LesterBisect mVisA pxVisA pyVisA mVisB pxVisB pyVisB
+                                         pxMiss pyMiss
+                                         (realToFrac mInvisA) (realToFrac mInvisB)
 
 -- | calculates MT2 using the lester_mt2_bisect algorithm.
-mT2AsymmBisect :: FourMomentum       -- ^ four-momentum of the first visible systme
-               -> FourMomentum       -- ^ four-momentum of the second visible system
-               -> TransverseMomentum -- ^ missing transverse momentum
-               -> Double             -- ^ invariant mass of the first invisible system
-               -> Double             -- ^ invariant mass of the second invisible system
-               -> Double
-mT2AsymmBisect visA visB ptmiss mInvisA mInvisB =
+mT2AsymmLesterBisect :: FourMomentum       -- ^ four-momentum of the first visible systme
+                     -> FourMomentum       -- ^ four-momentum of the second visible system
+                     -> TransverseMomentum -- ^ missing transverse momentum
+                     -> Double             -- ^ invariant mass of the first invisible system
+                     -> Double             -- ^ invariant mass of the second invisible system
+                     -> Double
+mT2AsymmLesterBisect visA visB ptmiss mInvisA mInvisB =
   let mVisA = mass visA
       (pxA, pyA) = pxpy visA
       mVisB = mass visB
       (pxB, pyB) = pxpy visB
       (pxX, pyX) = pxpy ptmiss
-  in mT2AsymmBisectPrim [mVisA, pxA, pyA] [mVisB, pxB, pyB] [pxX, pyX]
-                        mInvisA mInvisB
+  in mT2AsymmLesterBisectPrim [mVisA, pxA, pyA] [mVisB, pxB, pyB] [pxX, pyX]
+                              mInvisA mInvisB
 
-mT2SymmBisect :: FourMomentum       -- ^ four-momentum of the first visible systme
-              -> FourMomentum       -- ^ four-momentum of the second visible system
-              -> TransverseMomentum -- ^ missing transverse momentum
-              -> Double             -- ^ invariant mass of each invisible system
-              -> Double
-mT2SymmBisect visA visB ptmiss mInvisible =
-  mT2AsymmBisect visA visB ptmiss mInvisible mInvisible
+mT2SymmLesterBisect :: FourMomentum       -- ^ four-momentum of the first visible system
+                    -> FourMomentum       -- ^ four-momentum of the second visible system
+                    -> TransverseMomentum -- ^ missing transverse momentum
+                    -> Double             -- ^ invariant mass of each invisible system
+                    -> Double
+mT2SymmLesterBisect visA visB ptmiss mInvisible =
+  mT2AsymmLesterBisect visA visB ptmiss mInvisible mInvisible
+
+foreign import ccall unsafe "mt2_cwrapper/lester_mt2_bisect_c.h symm_mt2_chenghan_bisect"
+  c_SymmMT2ChengHanBisect :: CDouble -> CDouble -> CDouble
+                          -> CDouble -> CDouble -> CDouble
+                          -> CDouble -> CDouble -> CDouble -> CDouble
+
+mT2SymmChengHanBisectPrim :: [Double] -> [Double] -> [Double] -> Double -> Double
+mT2SymmChengHanBisectPrim visA visB ptMiss mInvis =
+  let (mVisA:pxVisA:pyVisA:_) = map realToFrac visA
+      (mVisB:pxVisB:pyVisB:_) = map realToFrac visB
+      (pxMiss:pyMiss:_) = map realToFrac ptMiss
+  in realToFrac $ c_SymmMT2ChengHanBisect mVisA pxVisA pyVisA mVisB pxVisB pyVisB
+                                          pxMiss pyMiss (realToFrac mInvis)
+
+-- | calculates MT2 using the lester_mt2_bisect algorithm.
+mT2SymmChengHanBisect :: FourMomentum       -- ^ four-momentum of the first visible system
+                      -> FourMomentum       -- ^ four-momentum of the second visible system
+                      -> TransverseMomentum -- ^ missing transverse momentum
+                      -> Double             -- ^ invariant mass of each invisible system
+                      -> Double
+mT2SymmChengHanBisect visA visB ptmiss mInvis =
+  let mVisA = mass visA
+      (pxA, pyA) = pxpy visA
+      mVisB = mass visB
+      (pxB, pyB) = pxpy visB
+      (pxX, pyX) = pxpy ptmiss
+  in mT2SymmChengHanBisectPrim [mVisA, pxA, pyA] [mVisB, pxB, pyB] [pxX, pyX] mInvis
