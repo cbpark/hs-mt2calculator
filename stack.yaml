@@ -12,4 +12,4 @@ packages:
 - '.'
 - ../hep-utilities
 extra-deps: []
-resolver: lts-3.4
+resolver: lts-3.9
