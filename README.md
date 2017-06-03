@@ -1,6 +1,6 @@
 # hs-mt2calculator
 
-This package provides a Hasekll FFI for calculating the MT2 variable.
+This package provides a Hasekll FFI for calculating the MT2 variable. Note that [hep-utilities](https://github.com/cbpark/hep-utilities) contains the pure Haskell implementation. See [`HEP.Kinematics.Variable`](https://github.com/cbpark/hep-utilities/blob/master/src/HEP/Kinematics/Variable.hs) and [`HEP.Kinematics.Variable.MT2`](https://github.com/cbpark/hep-utilities/blob/master/src/HEP/Kinematics/Variable/MT2.hs).
 
 ## Build and install
 
