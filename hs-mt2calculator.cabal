@@ -7,7 +7,7 @@ license:             GPL-3
 license-file:        LICENSE
 author:              Chan Beom Park
 maintainer:          cbpark@gmail.com
-copyright:           (c) 2014 - 2015 Chan Beom Park
+copyright:           (c) 2014-2015, 2017 Chan Beom Park
 category:            Physics
 build-type:          Simple
 cabal-version:       >=1.10
